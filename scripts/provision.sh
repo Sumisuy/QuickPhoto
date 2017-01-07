@@ -5,23 +5,24 @@
 touch /etc/profile.d/composer_global.sh
 cat << EOF | sudo tee -a /etc/profile.d/on_terminal_load.sh
   echo ======================================================
-  echo ======================================================
-  echo =
-  echo =   DEVELOPMENT ENVIRONMENT
-  echo =   FOR QUICK-PHOTO
-  echo =
-  echo =   Application Path /var/www   
-  echo =   Webroot /var/www/public
-  echo =
-  echo =   AUTHOR - Martin Smith - MS
-  echo =
-  echo ======================================================
   echo =
   echo =   CHANGELOG
   echo =   DATE ---- AUTHOR -- CHANGES
   echo =
   echo =   07/01/17 -- MS ---- Initial build
+  echo =   07/01/17 -- MS ---- Enabled beanstalk & Seed
   echo =
+  echo ======================================================
+  echo =
+  echo =   DEVELOPMENT ENVIRONMENT
+  echo =   FOR QUICK-PHOTO
+  echo =
+  echo =   Application Path /var/www
+  echo =   Webroot /var/www/public
+  echo =
+  echo =   AUTHOR - Martin Smith - MS
+  echo =
+  echo ======================================================
   echo ======================================================
 EOF
 
@@ -130,9 +131,9 @@ echo =
 echo ===================================
 
 sudo cp /var/www/scripts/000-default.conf /etc/apache2/sites-enabled/000-default.conf
-#sudo cp /var/www/scripts/qpbeanstalk.conf /etc/apache2/sites-available/qpbeanstalk.conf
+sudo cp /var/www/scripts/qpbeanstalk.conf /etc/apache2/sites-available/qpbeanstalk.conf
 sudo cp /var/www/scripts/apache2.conf /etc/apache2/apache2.conf
-#sudo a2ensite qpbeanstalk
+sudo a2ensite qpbeanstalk
 echo .
 sudo service apache2 restart
 
@@ -155,12 +156,13 @@ sudo composer install
 
 echo ===================================
 echo =
-echo =   MIGRATE AND RESTART SUPERVISOR
+echo =   MIGRATE AND SEED
 echo =
 echo ===================================
 
 cd /var/www/
 sudo php artisan migrate
+sudo php artisan db:seed
 
 echo ===================================
 echo =
@@ -169,7 +171,7 @@ echo =
 echo ===================================
 
 sudo apt-get install -y beanstalkd
-#sudo cp /var/www/scripts/beanstalkd /etc/default/beanstalkd
+sudo cp /var/www/scripts/beanstalkd /etc/default/beanstalkd
 sudo service beanstalkd restart
 
 echo ===================================
