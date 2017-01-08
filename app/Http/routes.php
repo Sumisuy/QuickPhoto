@@ -17,6 +17,6 @@ Route::group([ 'middleware' => 'auth' ], function() {
     Route::get('/archive', 'HomeController@index');
 });
 
-Route::get('/', function() {
-    return view('home');
-});
+Route::get('/', function() { return view('home'); });
+
+Route::post('upload-file', ['as'=>'images', 'uses'=>'TransferController@uploadImages']);
