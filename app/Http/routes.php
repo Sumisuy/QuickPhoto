@@ -11,6 +11,12 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::auth();
+
+Route::group([ 'middleware' => 'auth' ], function() {
+    Route::get('/archive', 'HomeController@index');
+});
+
+Route::get('/', function() {
+    return view('home');
 });
