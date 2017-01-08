@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
 
     <title>Laravel</title>
 
@@ -13,6 +14,7 @@
 
     <!-- Styles -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link href="/assets/components/formstone/dist/css/upload.css" rel="stylesheet">
     <link href="/assets/css/main.css" rel="stylesheet">
     <style>
         body {
@@ -53,7 +55,7 @@
                     @if (Auth::guest())
                         <li class="dropdown">
                             <a href="#" id="drop-location" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                                <span class="nav-user-false glyphicon glyphicon-user" aria-hidden="true"></span>
+                                <span class="hidden-xs nav-user-false glyphicon glyphicon-user" aria-hidden="true"></span>
                             </a>
 
                             <ul class="dropdown-menu" role="menu">
@@ -82,6 +84,9 @@
     <!-- JavaScripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js" integrity="sha384-I6F5OKECLVtK/BL+8iSLDEHowSAfUo76ZL9+kGAgTRdiByINKJaqTPH/QVNS1VDb" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="/assets/components/formstone/dist/js/core.js"></script>
+    <script src="/assets/components/formstone/dist/js/upload.js"></script>
+    <script src="/assets/js/main.js"></script>
     {{-- <script src="{{ elixir('js/app.js') }}"></script> --}}
 </body>
 </html>
