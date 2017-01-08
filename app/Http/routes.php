@@ -13,4 +13,10 @@
 
 Route::auth();
 
-Route::get('/', 'HomeController@index');
+Route::group([ 'middleware' => 'auth' ], function() {
+    Route::get('/archive', 'HomeController@index');
+});
+
+Route::get('/', function() {
+    return view('home');
+});

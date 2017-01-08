@@ -72,9 +72,10 @@ table {
 .nav-user-false, .nav-user-true {
     font-size: 24px;
     position: absolute;
-    top: -4px;
-    border: solid 1px #fff;
-    padding: 17px;
+    top: -1px;
+    border-left: solid 1px #fff;
+    border-right: solid 1px #fff;
+    padding: 14px;
 }
 
 .nav-user-false {
@@ -83,4 +84,8 @@ table {
 
 .nav-user-true {
     color: #77dd33;
+}
+
+.nav-user-false:hover, .nav-user-true:hover {
+    background-color: #444;
 }
