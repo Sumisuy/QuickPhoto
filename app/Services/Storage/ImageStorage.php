@@ -7,21 +7,20 @@ use Illuminate\Support\Facades\Storage;
 
 class ImageStorage
 {
-    private $path_adjustment;
+    private static $path_adjustment;
 
     /**
-     * SET IS GUEST
+     * SET PATH ADJUSTMENT
      * ---
-     * @param bool $isGuest
+     * Set path adjustment property.  Images will be stored in the app/public
+     * folder, use this method to adjust sub folders for user/session
+     * organisation.
+     * @param string $path
      * @author MS
-     * @return ImageStorage
      */
-    public function setIsGuest($isGuest)
+    public static function setPathAdjustment($path)
     {
-        $this->path_adjustment = ($isGuest) ? 'guest' : 'user';
-        $this->path_adjustment .= '/temporary';
-
-        return $this;
+        self::$path_adjustment = $path;
     }
 
     /**
@@ -36,13 +35,13 @@ class ImageStorage
         $filename = pathinfo($image_path, PATHINFO_BASENAME);
 
         Storage::disk('public')->put(
-            $this->path_adjustment . '/' . $filename,
+            self::$path_adjustment . '/' . $filename,
             file_get_contents($image_path)
         );
         unlink($image_path);
 
         return Storage::disk('public')
-            ->url($this->path_adjustment . '/' . $filename);
+            ->url(self::$path_adjustment . '/' . $filename);
     }
 
 //    public function addImageFromPdf()

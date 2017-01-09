@@ -24,8 +24,7 @@ class TransferController extends Controller
             storage_path('temp'),
             $request->file->getClientOriginalName()
         );
-        $image_path = $storage->setIsGuest(\Auth::guest())
-            ->addImageFromImage($temp_path);
+        $image_path = $storage->addImageFromImage($temp_path);
 
         $response->success(true)
             ->setMessage('Image successfully uploaded.')

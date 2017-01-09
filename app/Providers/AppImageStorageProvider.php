@@ -14,7 +14,12 @@ class AppImageStorageProvider extends ServiceProvider
      */
     public function boot()
     {
-
+        if (auth()->guest()) {
+            $path = 'guest/' . request('_token');
+        } else {
+            $path = 'user/' . (string)auth()->user()->id;
+        }
+        ImageStorage::setPathAdjustment($path);
     }
 
     /**
@@ -24,6 +29,6 @@ class AppImageStorageProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->instance('ImageStorage', new ImageStorage());
+        $this->app->singleton('ImageStorage', new ImageStorage());
     }
 }
