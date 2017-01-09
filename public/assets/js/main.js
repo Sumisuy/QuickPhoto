@@ -11,7 +11,16 @@ $(document).ready(function() {
             _token: CSRF_TOKEN
         }
     }).on("filecomplete.upload", function(e, file, response) {
-        console.log(response);
+        var img_address = JSON.parse(JSON.parse(response).details).image_path;
+        var container = $('#image-list ul');
+        var img_container = document.createElement("div");
+        var img = document.createElement("img");
+        img_container.className = 'image-list-item-container';
+        img.className = 'image-list-item';
+        img.setAttribute('src', img_address);
+        img.setAttribute('width', '100px');
+        img_container.append(img);
+        container.append(img_container);
     });
 
     $('.fs-upload-input').attr('name', 'images[]');

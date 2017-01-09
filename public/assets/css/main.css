@@ -134,4 +134,18 @@ body {
 #file-uploader-list {
     border-left: solid #222 2px;
     height: 430px;
+    overflow-y: scroll;
+}
+
+.image-list-item {
+    margin: auto;
+    display: block;
+}
+
+.image-list-item-container {
+    width: 100%;
+    border-bottom: solid #111 2px;
+    padding: 10px;
+    background-image: url('/assets/images/25p.png');
+    background-repeat: repeat;
 }

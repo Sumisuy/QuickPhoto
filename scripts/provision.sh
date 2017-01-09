@@ -195,6 +195,15 @@ sudo service apache2 restart
 
 echo ===================================
 echo =
+echo =   CREATE PUBLIC STORAGE SYMLINK
+echo =
+echo ===================================
+
+cd /var/www/
+sudo ln -s /var/www/storage/app/public/ /var/www/public/storage
+
+echo ===================================
+echo =
 echo =   FINAL UPDATE
 echo =
 echo ===================================

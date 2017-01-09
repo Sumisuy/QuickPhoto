@@ -158,6 +158,7 @@ return [
 
         Collective\Html\HtmlServiceProvider::class,
         \App\Providers\AppResponseProvider::class,
+        \App\Providers\AppImageStorageProvider::class,
 
     ],
 
