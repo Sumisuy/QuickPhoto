@@ -1,0 +1,59 @@
+#login-panel {
+    position: absolute;
+    z-index: 999;
+    background: url(/assets/images/layout/75g.png);
+    background-repeat: repeat;
+    color: #fff;
+    right: 50%;
+    top: 100px;
+    left: 50%;
+    width: 30%;
+    margin-left: -15%;
+}
+
+#login-container {
+    position: absolute;
+    top:0;
+    bottom:0;
+    left:0;
+    right:0;
+    z-index: 100;
+}
+
+#login-tab-button, #register-tab-button {
+    cursor: pointer;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 16px;
+    background: none;
+    padding: 20px;
+    width: 50%;
+    text-align: center;
+}
+
+#login-tab-button {
+    display: inline;
+    float: left;
+}
+
+#register-tab-button {
+    display: inline-block;
+}
+
+.login-tab-active {
+    background: url(/assets/images/layout/50p.png) !important;
+    background-repeat: repeat !important;
+}
+
+.login-panel-content {
+    background: url(/assets/images/layout/50p.png);
+    background-repeat: repeat;
+    padding: 20px;
+}
+
+#logout-title {
+    padding-bottom: 20px;
+    text-transform: uppercase;
+    font-size: 16px;
+    font-weight: bold;
+}
