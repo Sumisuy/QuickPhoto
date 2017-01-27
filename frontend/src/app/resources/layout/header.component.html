@@ -1,0 +1,20 @@
+<div id="header-bar" class="col-xs-12">
+    <div id="header-container">
+        <div id="logo">Q<span id="logo-lower">UICK</span>PHOTO</div>
+        <div id="nav-buttons">
+            <button (click)="imagePanel.toggleState()" [ngClass]="imagePanel.state ? 'btn nav-button nav-button-active' : 'btn nav-button'" title="View Your Images">
+                <i style="margin-right: 3px;" class="fa fa-camera" aria-hidden="true"></i>
+            </button>
+            <button (click)="resizePanel.toggleState()" [ngClass]="resizePanel.state ? 'btn nav-button nav-button-active' : 'btn nav-button'" title="Resize Images">
+                <i class="fa fa-expand" aria-hidden="true"></i>
+            </button>
+        </div>
+        <div id="right-nav-buttons">
+            <button (click)="loginRegisterPanel.toggleState()" [ngClass]="loginRegisterPanel.state ? 'btn nav-button nav-button-active' : 'btn nav-button'" title="User Account Panel">
+                <i class="fa fa-user" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</div>
+<login-panel></login-panel>
+<tool-resize></tool-resize>

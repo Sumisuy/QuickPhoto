@@ -1,0 +1,6 @@
+<app-header></app-header>
+<div id="background-cover" [ngStyle]="setBackgroundStyles()" [@backgroundFadeIn]="isLoaded()">
+    <div id="contents-container" class="col-xs-12">
+        <router-outlet></router-outlet>
+    </div>
+</div>

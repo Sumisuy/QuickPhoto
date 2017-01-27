@@ -2,96 +2,146 @@
 
 namespace App\Http\Responses;
 
-class StandardResponse extends Response implements ResponseInterface
+use App\Exceptions\Response\ResponseFailedValidation;
+use Config;
+
+class StandardResponse extends Response
 {
-    private $status;
-    private $message;
-    private $details = '';
+    private $details;
+    private $message = 'success';
+    private $status = 200;
 
     /**
-     * ENGAGE
+     * SELECT JSON
      * ---
      * @author MS
-     * @return \Symfony\Component\HttpFoundation\Response
-     * @throws \Exception
+     * @return StandardResponse
      */
-    public function engage()
+    public function selectJson()
     {
-        if (isset($this->status) && isset($this->message)) {
-
-            $this->response_body = [
-                'status'  => $this->status,
-                'message' => $this->message,
-                'details' => $this->details,
-            ];
-            return parent::engage();
-        }
-        throw new \Exception(parent::MISSING_RESPONSE_PARAMETERS);
+        $this->addBody(
+            json_encode($this->details),
+            $this->message,
+            $this->status
+        );
+        return $this;
     }
 
     /**
-     * SUCCESS
+     * SELECT OBJECT
      * ---
      * @author MS
-     * @param bool $status
-     * @author MS
      * @return StandardResponse
+     */
+    public function selectObject()
+    {
+        $this->addBody(
+            $this->details,
+            $this->message,
+            $this->status
+        );
+        return $this;
+    }
+
+    /**
+     * VALIDATE DETAILS OBJECT
+     * ---
+     * @param Config $configuration
+     * @author MS
+     * @return bool|string
      * @throws \Exception
      */
-    public function success($status)
+    private function validateDetailsObject(Config $configuration)
     {
-        if (is_bool($status)) {
-
-            if ($status) {
-
-                $this->status = 'success';
-
-                return $this;
+        foreach ($configuration as $property => $validation) {
+            if (property_exists($this->details, $property)) {
+                continue;
             }
-            $this->status = 'fail';
-
-            return $this;
+            return $property;
         }
-        throw new \Exception($this->datatypeMessage('bool'));
+        return true;
     }
 
     /**
-     * SET MESSAGE
+     * SELECT JSON WITH CONFIG
      * ---
-     * @author MS
-     * @param string $message
+     * @param string $config
      * @author MS
      * @return StandardResponse
-     * @throws \Exception
+     * @throws ResponseFailedValidation
      */
-    public function setMessage($message)
+    public function selectJsonWithConfig($config)
     {
-        if (is_string($message)) {
-
-            $this->message = $message;
-
-            return $this;
+        if ($failed = $this->validateDetailsObject(Config::get($config))) {
+            throw new ResponseFailedValidation(
+                'StandardResponse::selectJsonWithConfig() [' .
+                $failed .
+                '] required property not set on response object'
+            );
         }
-        throw new \Exception($this->datatypeMessage('string'));
+        return $this->selectJson();
+    }
+
+    /**
+     * SELECT OBJECT WITH CONFIG
+     * ---
+     * @param string $config
+     * @author MS
+     * @return StandardResponse
+     * @throws ResponseFailedValidation
+     */
+    public function selectObjectWithConfig($config)
+    {
+        if ($failed = $this->validateDetailsObject(Config::get($config))) {
+            throw new ResponseFailedValidation(
+                'StandardResponse::selectObjectWithConfig() [' .
+                $failed .
+                '] required property not set on response object'
+            );
+        }
+        return $this->selectObject();
     }
 
     /**
      * SET DETAILS
      * ---
-     * @author MS
-     * @param string $details
+     * @param string $property
+     * @param mixed  $value
      * @author MS
      * @return StandardResponse
-     * @throws \Exception
      */
-    public function setDetails($details)
+    public function setDetails($property, $value)
     {
-        if (is_string($details)) {
-
-            $this->details = $details;
-
-            return $this;
+        if ($this->details === null) {
+            $this->details = new \stdClass();
         }
-        throw new \Exception($this->datatypeMessage('string'));
+        $this->details->{$property} = $value;
+        return $this;
+    }
+
+    /**
+     * SET MESSAGE
+     * ---
+     * @param string $message
+     * @author MS
+     * @return StandardResponse
+     */
+    public function setMessage($message)
+    {
+        $this->message = $message;
+        return $this;
+    }
+
+    /**
+     * SET STATUS
+     * ---
+     * @param int $status
+     * @author MS
+     * @return StandardResponse
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+        return $this;
     }
 }

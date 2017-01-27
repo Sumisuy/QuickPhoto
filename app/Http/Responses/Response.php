@@ -4,9 +4,6 @@ namespace App\Http\Responses;
 
 class Response extends \Illuminate\Http\Response
 {
-    const MISSING_RESPONSE_PARAMETERS = 'Could not respond to Ajax request. Response object missing required parameters';
-    const MALFORMED_FILE_PATH = 'The file path provided on response object is either malformed or invalid';
-
     protected $response_body;
     protected $download;
 
@@ -26,17 +23,36 @@ class Response extends \Illuminate\Http\Response
 
                 return response()->download($this->download);
             }
-            $this->setContent(
+            parent::setContent(
                 [
-                    'status' => 'fail',
+                    'status' => 404,
                     'message' => 'Unable to get file for downloading'
                 ]
             );
         } elseif (isset($this->response_body)) {
 
-            $this->setContent($this->removeEmpty($this->response_body));
+            parent::setContent(self::removeEmpty($this->response_body));
         }
         return parent::send();
+    }
+
+    /**
+     * ADD BODY
+     * ---
+     * @param string|object $details
+     * @param string $message
+     * @param int $status
+     * @author MS
+     */
+    protected function addBody($details, $message = "", $status = 200)
+    {
+        $this->setStatusCode($status);
+        $this->response_body = [
+            'message' => $message,
+            'body' => $details,
+            'guest' => auth()->guest(),
+            'modifier' => session()->getId(),
+        ];
     }
 
     /**
@@ -51,7 +67,7 @@ class Response extends \Illuminate\Http\Response
     {
         $method = debug_backtrace()[1]['function'];
         return 'Incorrect datatype passed to response object setter: [' .
-        $method . '] Expected: [' . $type . ']';
+            $method . '] Expected: [' . $type . ']';
     }
 
     /**

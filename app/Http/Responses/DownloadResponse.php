@@ -2,7 +2,7 @@
 
 namespace App\Http\Responses;
 
-class DownloadResponse extends Response implements ResponseInterface
+class DownloadResponse extends Response
 {
     private $file_path;
 
@@ -12,35 +12,18 @@ class DownloadResponse extends Response implements ResponseInterface
      * @param string $file_path
      * @author MS
      * @returns DownloadResponse
-     * @throws \Exception
      */
     public function addFile($file_path)
     {
-
         if (is_file($file_path)) {
-
+            $headers = array(
+                header('Content-Type: application/zip', 'Content-Disposition: attachment;')
+            );
+            $this->withHeaders($headers);
             $this->file_path = $file_path;
-
+            $this->download = $file_path;
+            
             return $this;
         }
-        throw new \Exception(parent::MALFORMED_FILE_PATH);
-    }
-
-    /**
-     * ENGAGE
-     * ---
-     * @author MS
-     * @return \Symfony\Component\HttpFoundation\Response
-     * @throws \Exception
-     */
-    public function engage()
-    {
-        if (isset($this->file_path)) {
-
-            $this->download = $this->file_path;
-
-            return parent::engage();
-        }
-        throw new \Exception(parent::MISSING_RESPONSE_PARAMETERS);
     }
 }

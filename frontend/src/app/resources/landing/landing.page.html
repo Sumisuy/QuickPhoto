@@ -1,0 +1,80 @@
+<div ng2FileDrop
+     [ngClass]="{'nv-file-over': hasBaseDropZoneOver}"
+     (fileOver)="fileOverBase($event)"
+     [uploader]="uploader"
+     class="well my-drop-zone"
+     id="main-drop-zone"
+     *ngIf="!editing_in_progress"
+>
+    <span id="drop-zone-title">DROP IMAGE FILES</span>
+    <span id="drop-zone-sub-title">
+        DRAG AND DROP YOUR IMAGE FILES ANYWHERE IN THIS SPACE TO BEGIN EDITING THEM
+    </span>
+</div>
+
+<div id="editing-zone" *ngIf="editing_in_progress">
+    <img style="padding: 10px;" [attr.src]="editing_image_address" >
+</div>
+
+<div *ngIf="imagePanel.state" id="upload-queue" class="col-md-12">
+    <div id="upload-title">
+        <span><i style="margin-right: 3px;" class="fa fa-camera" aria-hidden="true"></i> Images</span>
+        <div ngbDropdown class="d-inline-block upload-selection-select">
+            <button style="background-color: #444;color: #fff;" class="btn btn-outline upload-btn" id="dropdownMenu1" [disabled]="hasNoSelectedItems()" ngbDropdownToggle>Selected</button>
+            <div style="background: url('/assets/images/layout/75p.png'); background-repeat: repeat; background-color: transparent; color: #fff" class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                <button style="color: #fff" class="dropdown-item" (click)="deleteSelected()">Delete</button>
+                <button style="color: #fff" class="dropdown-item" (click)="loadSelected()" [disabled]="selectedAlreadyLoaded()">Load</button>
+            </div>
+        </div>
+        <div id="uploaded-details">
+            <div *ngFor="let item of uploader.queue">
+                <div class="upload-queue-image-details" *ngIf="item.isSuccess" [ngClass]="upload_details_states[uploader.getIndexOfItem(item)] ? 'visible' : 'hidden'" >
+                    <div class="upload-details-title">
+                        <span>Preview</span>
+                    </div>
+                    <img style="padding: 10px;" [attr.src]="loaded_images[uploader.getIndexOfItem(item)]" width="400px">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="upload-content" [ngClass]="editing_in_progress ? 'content-small' : 'content-large'">
+        <div
+            [ngClass]="
+                item.isSuccess ? upload_click_states[uploader.getIndexOfItem(item)] ? 'upload-clicked upload-queue-file col-xs-12' : 'upload-success upload-queue-file col-xs-12' :
+                item.isCancel ? 'upload-cancel upload-queue-file col-xs-12' :
+                item.isError ? 'upload-error upload-queue-file col-xs-12' :
+                'upload-queue-file col-xs-12'
+            "
+            *ngFor="let item of uploader.queue"
+            (mouseover)="hoverEvent(uploader.getIndexOfItem(item))"
+            (mouseleave)="hoverOutEvent()"
+
+        >
+            <div class="click-space" (click)="selectImageForEditing(item)"></div>
+            <div class="upload-queue-file-info col-xs-12">
+                <input type="checkbox" class="upload-queue-select-file" (change)="toggleSelected($event, item, uploader.getIndexOfItem(item))">
+                <span class="upload-queue-filename">{{ item?.file?.name }}</span>
+                <span class="upload-queue-file-size">{{ item?.file?.size/1024/1024 | number:'.1' }} MB</span>
+            </div>
+            <ngb-progressbar  class="upload-queue-file-progress" value="{{ item.progress }}" type="info"></ngb-progressbar>
+        </div>
+    </div>
+    <div ng2FileDrop
+         [ngClass]="{'nv-file-over': hasBaseDropZoneOver}"
+         (fileOver)="fileOverBase($event)"
+         [uploader]="uploader"
+         class="well my-drop-zone"
+         id="main-drop-zone"
+
+    >
+        <span id="drop-zone-title">DROP IMAGE FILES</span>
+    </div>
+    <div id="upload-panel">
+        <ngb-progressbar class="active" value="{{ uploader.progress }}" type="info"></ngb-progressbar>
+        <button style="margin-left: 10px" type="button" class="btn btn-info upload-btn" (click)="uploader.uploadAll()" [disabled]="!uploader.getNotUploadedItems().length">Load All</button>
+        <button type="button" class="btn btn-info upload-btn" (click)="uploader.cancelAll()" [disabled]="!uploader.isUploading">Pause</button>
+        <button type="button" class="btn btn-info upload-btn" (click)="downloadAll()" [disabled]="hasNothingToDownload()">Download all</button>
+        <button type="button" class="btn btn-danger upload-btn" (click)="clearAll(uploader)" [disabled]="!uploader.queue.length">Clear all</button>
+    </div>
+
+</div>
